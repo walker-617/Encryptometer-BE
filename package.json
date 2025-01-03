@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/walker-617/Encryptometer-BE#readme",
   "dependencies": {
+    "dotenv": "^16.4.7",
     "express": "^4.21.2"
   },
   "devDependencies": {
