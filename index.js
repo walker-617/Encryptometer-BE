@@ -1,11 +1,16 @@
 const express = require("express");
+const cors = require("cors"); // Import cors
 const fs = require("fs").promises;
 const { encrypt } = require("./helpers/encrypt");
 const { decrypt } = require("./helpers/decrypt");
 
 const app = express();
 const port = 1000;
-
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 require("dotenv").config();
 const { SECRET_KEY } = process.env;
 const SecretKey = Buffer.from(SECRET_KEY, "hex");
