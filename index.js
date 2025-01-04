@@ -6,14 +6,13 @@ const { decrypt } = require("./helpers/decrypt");
 
 const app = express();
 const port = 1000;
-app.use(cors({
-  origin: 'http://localhost:3000',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-require("dotenv").config();
-const { SECRET_KEY } = process.env;
-const SecretKey = Buffer.from(SECRET_KEY, "hex");
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 app.get("/", (req, res) => {
   res.send("welcome to Encryptometer BE API server.");
@@ -23,9 +22,9 @@ app.get("/", (req, res) => {
 app.get("/test/api/encrypt", async (req, res) => {
   try {
     const { algorithm } = req.query;
-    const text = await fs.readFile("Dummy_256KB.json", "utf8");
+    const text = await fs.readFile("Dummy_512KB.json", "utf8");
     const data = JSON.stringify(text);
-    const response = encrypt(data, algorithm, SecretKey);
+    const response = encrypt(data, algorithm);
     res.send(response);
   } catch (err) {
     console.error(err);
@@ -38,7 +37,7 @@ app.get("/api/encrypt", (req, res) => {
   try {
     const { text, algorithm } = req.query;
     const data = text;
-    const response = encrypt(data, algorithm, SecretKey);
+    const response = encrypt(data, algorithm);
     res.send(response);
   } catch (err) {
     console.error(err);
@@ -50,12 +49,7 @@ app.get("/api/decrypt", (req, res) => {
   try {
     const { text, algorithm, iv } = req.query;
     const data = text;
-    const response = decrypt(
-      data,
-      algorithm,
-      SecretKey,
-      Buffer.from(iv, "hex")
-    );
+    const response = decrypt(data, algorithm, Buffer.from(iv, "hex"));
     res.send(response);
   } catch (err) {
     console.error(err);
